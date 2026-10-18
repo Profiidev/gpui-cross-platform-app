@@ -1,10 +1,33 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
-{
-  packages = with pkgs; [
-    cargo-ndk
-    just
+let
+  # gpui desktop build deps (same as proton)
+  buildDeps = with pkgs; [
+    pkg-config
+    fontconfig
+    freetype
+    libxkbcommon
+    libxcb
   ];
+
+  # gpui dlopens these
+  gpuiLibs = with pkgs; [
+    wayland
+    vulkan-loader
+    libxkbcommon
+  ];
+in
+{
+  packages =
+    with pkgs;
+    [
+      cargo-ndk
+      just
+    ]
+    ++ buildDeps
+    ++ gpuiLibs;
+
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath gpuiLibs;
 
   languages = {
     java.jdk.package = pkgs.jdk17;

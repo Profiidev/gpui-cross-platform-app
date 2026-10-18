@@ -1,4 +1,5 @@
 // Pulls in gpui-mobile's platform symbols (JNI / iOS FFI).
+#[cfg(any(target_os = "ios", target_os = "android"))]
 extern crate gpui_mobile;
 
 use gpui::{App, Context, IntoElement, Render, Window, WindowOptions, div, prelude::*};
@@ -19,6 +20,12 @@ fn open_root(cx: &mut App) {
     })
     .expect("open root window");
     cx.activate(true);
+}
+
+/// Desktop entry point (Linux, macOS, Windows), used by `src/main.rs`.
+#[cfg(not(any(target_os = "ios", target_os = "android")))]
+pub fn run_desktop() {
+    gpui_kit::application().run(open_root);
 }
 
 /// Called from App.swift before `gpui_ios_run_demo()`.

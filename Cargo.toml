@@ -7,6 +7,16 @@ edition = "2024"
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
+gpui = { package = "gpui-pre", version = "=0.3.9", default-features = false }
+gpui-kit = { version = "0.7.3", default-features = false, features = ["component"] }
+log = "0.4"
+
+[target.'cfg(target_os = "ios")'.dependencies]
+# ponytail: upstream src/ios/platform_view.rs uses packages::{video_player, camera}
+# without cfg gates; drop this once gpui-mobile fixes it.
+gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = ["video_player", "camera"] }
+
+[target.'cfg(target_os = "android")'.dependencies]
 # Plugin packages are off. To re-enable one, add its feature here and undo the
 # matching "disabled" block in android/app/src/main/AndroidManifest.xml (iOS
 # usage strings are in ios/Info.plist). Available features: url_launcher,
@@ -18,16 +28,6 @@ crate-type = ["cdylib", "staticlib", "rlib"]
 # The Java helpers in android/app/src/main/java/dev/gpui/mobile stay compiled;
 # they are inert until a Rust feature calls them.
 gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = [] }
-gpui = { package = "gpui-pre", version = "=0.3.9", default-features = false }
-gpui-kit = { version = "0.7.3", default-features = false, features = ["component"] }
-log = "0.4"
-
-[target.'cfg(target_os = "ios")'.dependencies]
-# ponytail: upstream src/ios/platform_view.rs uses packages::{video_player, camera}
-# without cfg gates; drop this once gpui-mobile fixes it.
-gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = ["video_player", "camera"] }
-
-[target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.15"
 android-activity = { version = "0.6", features = ["native-activity"] }
 

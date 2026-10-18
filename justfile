@@ -20,3 +20,7 @@ android-release:
 ios:
     cd ios && xcodegen generate --spec project.yml
     cd ios && xcodebuild -project Lt.xcodeproj -scheme Lt -sdk iphonesimulator -configuration Debug -derivedDataPath build build
+
+# Desktop app (Linux / macOS / Windows)
+desktop:
+    cargo run
