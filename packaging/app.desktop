@@ -1,4 +1,4 @@
-[Desktop Entry]
+{% raw %}[Desktop Entry]
 Categories={{categories}}
 {{#if comment}}
 Comment={{comment}}
@@ -8,4 +8,4 @@ Icon={{icon}}
 Name={{name}}
 Terminal=false
 Type=Application
-StartupWMClass=io.profidev.template
+{% endraw %}StartupWMClass={{app_id}}

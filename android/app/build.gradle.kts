@@ -26,11 +26,11 @@ val keystoreProperties = Properties().apply {
 }
 
 android {
-    namespace = "io.profidev.template"
+    namespace = "{{app_id}}"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "io.profidev.template"
+        applicationId = "{{app_id}}"
         minSdk = 26          // Vulkan 1.0 is mandatory from API 26+
         targetSdk = 34
         versionCode = vMajor * 10000 + vMinor * 100 + vPatch
@@ -43,7 +43,7 @@ android {
         }
 
         // Forward the library name to the manifest via a placeholder.
-        manifestPlaceholders["nativeLibraryName"] = "template"
+        manifestPlaceholders["nativeLibraryName"] = "{{crate_name}}"
     }
 
     signingConfigs {
@@ -99,10 +99,10 @@ android {
         // release mode and stripping again can break backtraces.
         jniLibs {
             keepDebugSymbols += listOf(
-                "*/arm64-v8a/libtemplate.so",
-                "*/armeabi-v7a/libtemplate.so",
-                "*/x86_64/libtemplate.so",
-                "*/x86/libtemplate.so"
+                "*/arm64-v8a/lib{{crate_name}}.so",
+                "*/armeabi-v7a/lib{{crate_name}}.so",
+                "*/x86_64/lib{{crate_name}}.so",
+                "*/x86/lib{{crate_name}}.so"
             )
         }
     }

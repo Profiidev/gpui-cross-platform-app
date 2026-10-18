@@ -1,5 +1,6 @@
 jni := "android/app/src/main/jniLibs"
 abis := "-t arm64-v8a -t armeabi-v7a -t x86 -t x86_64"
+app_id := `sed -n 's/.*applicationId = "\(.*\)"/\1/p' android/app/build.gradle.kts`
 
 # Debug build for one ABI (default: emulator), install and launch. e.g. `just android arm64-v8a`
 android abi="x86_64":
@@ -7,7 +8,7 @@ android abi="x86_64":
     cargo ndk -t {{abi}} -P 26 -o {{jni}} build --lib
     rm -f {{jni}}/*/libgpui_mobile-*.so
     cd android && ./gradlew installDebug
-    adb shell am start -n io.profidev.template/dev.gpui.mobile.GpuiActivity
+    adb shell am start -n {{app_id}}/dev.gpui.mobile.GpuiActivity
 
 # Release APK + AAB for all ABIs, signed when android/keystore.properties exists
 android-release:
@@ -18,10 +19,13 @@ android-release:
 
 # macOS only: generate the Xcode project (its pre-build phase runs cargo)
 ios:
+    #!/usr/bin/env bash
+    set -euo pipefail
     cd ios && xcodegen generate --spec project.yml
-    cd ios && xcodebuild -project Template.xcodeproj -scheme Template -sdk iphonesimulator -configuration Debug -derivedDataPath build build
+    scheme=$(sed -n 's/^name: //p' project.yml)
+    xcodebuild -project "$scheme.xcodeproj" -scheme "$scheme" -sdk iphonesimulator -configuration Debug -derivedDataPath build build
 
-# Desktop app (Linux / macOS / Windows)
+# Run on desktop (Linux / macOS / Windows), also handy for quick UI iteration
 desktop:
     cargo run
 
@@ -39,8 +43,11 @@ icon src:
     done
     # App Store rejects icons with an alpha channel
     magick "{{src}}" -resize 1024x1024 -background white -alpha remove -alpha off ios/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png
-    magick "{{src}}" -resize 32x32 packaging/icons/32x32.png
-    magick "{{src}}" -resize 128x128 packaging/icons/128x128.png
-    magick "{{src}}" -resize 256x256 packaging/icons/128x128@2x.png
-    magick "{{src}}" -define icon:auto-resize=256,128,64,48,32,16 packaging/icons/icon.ico
+    # desktop packaging (absent in mobile-only projects)
+    if [ -d packaging/icons ]; then
+        magick "{{src}}" -resize 32x32 packaging/icons/32x32.png
+        magick "{{src}}" -resize 128x128 packaging/icons/128x128.png
+        magick "{{src}}" -resize 256x256 packaging/icons/128x128@2x.png
+        magick "{{src}}" -define icon:auto-resize=256,128,64,48,32,16 packaging/icons/icon.ico
+    fi
     echo "icon updated from {{src}}"

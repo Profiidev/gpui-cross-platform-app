@@ -13,15 +13,15 @@ impl Render for Home {
       .flex()
       .items_center()
       .justify_center()
-      .child("Hello from template")
+      .child("Hello from {{app_name}}")
   }
 }
 
 fn open_root(cx: &mut App) {
   gpui_kit::init(cx);
   let options = WindowOptions {
-    // Matches StartupWMClass in packaging/template.desktop
-    app_id: Some("io.profidev.template".into()),
+    // Matches StartupWMClass in packaging/app.desktop
+    app_id: Some("{{app_id}}".into()),
     ..Default::default()
   };
   cx.open_window(options, |window, cx| {
@@ -54,7 +54,7 @@ fn android_main(app: android_activity::AndroidApp) {
   android_logger::init_once(
     android_logger::Config::default()
       .with_max_level(log::LevelFilter::Info)
-      .with_tag("template"),
+      .with_tag("{{crate_name}}"),
   );
   jni::install_panic_hook();
   let _platform = jni::init_platform(&app);

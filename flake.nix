@@ -1,5 +1,5 @@
 {
-  description = "Template";
+  description = "{{app_name}}";
 
   nixConfig = {
     extra-substituters = [
@@ -31,8 +31,8 @@
       in
       {
         packages = rec {
-          default = template;
-          template = pkgs.callPackage ./packaging/package.nix { };
+          default = {{crate_name}};
+          {{crate_name}} = pkgs.callPackage ./packaging/package.nix { };
         };
       }
     );

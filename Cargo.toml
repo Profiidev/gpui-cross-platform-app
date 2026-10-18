@@ -1,17 +1,17 @@
 [package]
-name = "template"
+name = "{{project-name}}"
 version = "0.1.0"
-description = "GPUI Kit app template for desktop, Android and iOS"
+description = "{{app_name}}"
 edition = "2024"
 
-# `cargo packager --release` (CI: .github/workflows/app-release.yml)
+{% if platforms == "mobile+desktop" %}# `cargo packager --release` (CI: .github/workflows/app-release.yml)
 [package.metadata.packager]
-product-name = "Template"
-identifier = "io.profidev.template"
+product-name = "{{app_name}}"
+identifier = "{{app_id}}"
 authors = ["ProfiiDev"]
 publisher = "profidev"
 category = "Utility"
-before-packaging-command = "cargo build --release --bin template"
+before-packaging-command = "cargo build --release --bin {{project-name}}"
 icons = [
   "packaging/icons/32x32.png",
   "packaging/icons/128x128.png",
@@ -20,7 +20,7 @@ icons = [
 ]
 
 [package.metadata.packager.deb]
-desktop-template = "packaging/template.desktop"
+desktop-template = "packaging/app.desktop"
 depends = [
   "libxkbcommon0",
   "libxkbcommon-x11-0",
@@ -33,7 +33,7 @@ depends = [
 
 [package.metadata.packager.nsis]
 installer-icon = "packaging/icons/icon.ico"
-
+{% endif %}
 [lib]
 crate-type = ["cdylib", "staticlib", "rlib"]
 
@@ -76,5 +76,5 @@ strip = true
 panic = "abort"
 
 [profile.dev]
-# Full debuginfo makes libtemplate.so ~600 MB per ABI
+# Full debuginfo makes the Android .so ~600 MB per ABI
 debug = "line-tables-only"

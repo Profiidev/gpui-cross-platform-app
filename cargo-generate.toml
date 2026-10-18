@@ -1,0 +1,51 @@
+[template]
+cargo_generate_version = ">=0.23.0"
+# Not part of the generated project
+ignore = [
+  "target",
+  "result",
+  ".devenv",
+  ".devenv.flake.nix",
+  ".direnv",
+  "VM.md",
+  "local.properties",
+  ".android",
+  "android/.gradle",
+  "android/build",
+  "android/app/build",
+  "android/app/src/main/jniLibs",
+  "ios/build",
+  "hooks",
+]
+# Files whose own {{ }} syntax (GitHub Actions, just) must not be read as Liquid
+exclude = [
+  ".github/**",
+  "justfile",
+  "android/gradlew",
+  "android/gradlew.bat",
+  "**/*.png",
+  "**/*.ico",
+  "**/*.jar",
+  "**/*.ttf",
+]
+
+[placeholders]
+app_id_prefix = { type = "string", prompt = "App ID prefix (reverse DNS, the app ID becomes <prefix>.<name>)", default = "io.profidev", regex = "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)*$" }
+platforms = { type = "string", prompt = "Platforms to ship", choices = [
+  "mobile+desktop",
+  "mobile",
+], default = "mobile+desktop" }
+
+[hooks]
+pre = ["hooks/pre.rhai"]
+
+# Mobile only: drop desktop packaging and release. `just desktop`, the desktop
+# dev libs and the test pipeline stay so the app can still be tried on desktop.
+[conditional.'platforms == "mobile"']
+ignore = [
+  "packaging",
+  "flake.nix",
+  "flake.lock",
+  ".github/workflows/desktop-release.yml",
+  ".github/workflows/nix-build.yml",
+]

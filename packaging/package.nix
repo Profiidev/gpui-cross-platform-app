@@ -20,7 +20,7 @@ let
 in
 
 rustPlatform.buildRustPackage {
-  pname = "template";
+  pname = "{{project-name}}";
   version = (lib.importTOML ../Cargo.toml).package.version;
 
   src = ./..;
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
 
   cargoBuildFlags = [
     "--bin"
-    "template"
+    "{{project-name}}"
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -51,27 +51,27 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   postInstall = ''
-    install -Dm644 packaging/icons/32x32.png $out/share/icons/hicolor/32x32/apps/template.png
-    install -Dm644 packaging/icons/128x128.png $out/share/icons/hicolor/128x128/apps/template.png
-    install -Dm644 packaging/icons/128x128@2x.png $out/share/icons/hicolor/256x256/apps/template.png
-    install -Dm644 packaging/template.desktop $out/share/applications/template.desktop
-    substituteInPlace $out/share/applications/template.desktop \
-      --replace-fail "{{categories}}" "Utility;" \
-      --replace-fail "{{exec}}" "$out/bin/template" \
-      --replace-fail "{{icon}}" "template" \
-      --replace-fail "{{name}}" "Template"
-    sed -i '/{{/d' $out/share/applications/template.desktop
+    install -Dm644 packaging/icons/32x32.png $out/share/icons/hicolor/32x32/apps/{{project-name}}.png
+    install -Dm644 packaging/icons/128x128.png $out/share/icons/hicolor/128x128/apps/{{project-name}}.png
+    install -Dm644 packaging/icons/128x128@2x.png $out/share/icons/hicolor/256x256/apps/{{project-name}}.png
+    install -Dm644 packaging/app.desktop $out/share/applications/{{project-name}}.desktop
+    substituteInPlace $out/share/applications/{{project-name}}.desktop \
+      --replace-fail "{% raw %}{{categories}}{% endraw %}" "Utility;" \
+      --replace-fail "{% raw %}{{exec}}{% endraw %}" "$out/bin/{{project-name}}" \
+      --replace-fail "{% raw %}{{icon}}{% endraw %}" "{{project-name}}" \
+      --replace-fail "{% raw %}{{name}}{% endraw %}" "{{app_name}}"
+    sed -i '/{% raw %}{{{% endraw %}/d' $out/share/applications/{{project-name}}.desktop
   '';
 
   postFixup = ''
-    patchelf --add-rpath ${lib.makeLibraryPath gpuiLibs} $out/bin/template
+    patchelf --add-rpath ${lib.makeLibraryPath gpuiLibs} $out/bin/{{project-name}}
   '';
 
   meta = {
-    description = "GPUI Kit app template for desktop, Android and iOS";
-    homepage = "https://github.com/Profiidev/template";
+    description = "{{app_name}}";
+    homepage = "https://github.com/Profiidev/{{project-name}}";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    mainProgram = "template";
+    mainProgram = "{{project-name}}";
   };
 }
