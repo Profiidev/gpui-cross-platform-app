@@ -8,7 +8,7 @@ struct Home;
 
 impl Render for Home {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        div().size_full().flex().items_center().justify_center().child("Hello from lt")
+        div().size_full().flex().items_center().justify_center().child("Hello from template")
     }
 }
 
@@ -44,7 +44,7 @@ fn android_main(app: android_activity::AndroidApp) {
     android_logger::init_once(
         android_logger::Config::default()
             .with_max_level(log::LevelFilter::Info)
-            .with_tag("lt"),
+            .with_tag("template"),
     );
     jni::install_panic_hook();
     let _platform = jni::init_platform(&app);

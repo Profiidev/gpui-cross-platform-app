@@ -7,7 +7,7 @@ android abi="x86_64":
     cargo ndk -t {{abi}} -P 26 -o {{jni}} build --lib
     rm -f {{jni}}/*/libgpui_mobile-*.so
     cd android && ./gradlew installDebug
-    adb shell am start -n io.profidev.lt/dev.gpui.mobile.GpuiActivity
+    adb shell am start -n io.profidev.template/dev.gpui.mobile.GpuiActivity
 
 # Release APK + AAB for all ABIs, signed when android/keystore.properties exists
 android-release:
@@ -19,7 +19,7 @@ android-release:
 # macOS only: generate the Xcode project (its pre-build phase runs cargo)
 ios:
     cd ios && xcodegen generate --spec project.yml
-    cd ios && xcodebuild -project Lt.xcodeproj -scheme Lt -sdk iphonesimulator -configuration Debug -derivedDataPath build build
+    cd ios && xcodebuild -project Template.xcodeproj -scheme Template -sdk iphonesimulator -configuration Debug -derivedDataPath build build
 
 # Desktop app (Linux / macOS / Windows)
 desktop:

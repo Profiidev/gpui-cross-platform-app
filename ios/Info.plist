@@ -6,13 +6,13 @@
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleExecutable</key>
-    <string>Lt</string>
+    <string>Template</string>
     <key>CFBundleIdentifier</key>
-    <string>io.profidev.lt</string>
+    <string>io.profidev.template</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
     <key>CFBundleName</key>
-    <string>lt</string>
+    <string>template</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
@@ -70,7 +70,7 @@
     <array>
         <dict>
             <key>CFBundleURLName</key>
-            <string>io.profidev.lt</string>
+            <string>io.profidev.template</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>gpui</string>

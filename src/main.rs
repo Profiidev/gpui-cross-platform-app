@@ -1,5 +1,5 @@
 fn main() {
     // Mobile hosts enter through the library (App.swift / android_main).
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
-    lt::run_desktop();
+    template::run_desktop();
 }

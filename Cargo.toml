@@ -1,5 +1,5 @@
 [package]
-name = "lt"
+name = "template"
 version = "0.1.0"
 edition = "2024"
 
@@ -39,5 +39,5 @@ strip = true
 panic = "abort"
 
 [profile.dev]
-# Full debuginfo makes liblt.so ~600 MB per ABI
+# Full debuginfo makes libtemplate.so ~600 MB per ABI
 debug = "line-tables-only"

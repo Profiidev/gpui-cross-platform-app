@@ -82,7 +82,7 @@ final class ContentController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "lt"
+        title = "template"
         overrideUserInterfaceStyle = .light
         view.backgroundColor = .systemBackground
 

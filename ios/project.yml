@@ -1,4 +1,4 @@
-name: Lt
+name: Template
 options:
   bundleIdPrefix: dev.gpui
   deploymentTarget:
@@ -12,7 +12,7 @@ settings:
     DEVELOPMENT_TEAM: "" # set your team for device builds
 
 targets:
-  Lt:
+  Template:
     type: application
     platform: iOS
     sources:
@@ -27,8 +27,8 @@ targets:
         buildPhase: resources
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: io.profidev.lt
-        PRODUCT_NAME: Lt
+        PRODUCT_BUNDLE_IDENTIFIER: io.profidev.template
+        PRODUCT_NAME: Template
         INFOPLIST_FILE: Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         TARGETED_DEVICE_FAMILY: "1,2"
@@ -85,7 +85,7 @@ targets:
         "RUST_TRIPLE[sdk=iphoneos*]": aarch64-apple-ios
         "RUST_TRIPLE[sdk=iphonesimulator*][arch=arm64]": aarch64-apple-ios-sim
         "RUST_TRIPLE[sdk=iphonesimulator*][arch=x86_64]": x86_64-apple-ios
-        RUST_STATIC_LIB: "$(PROJECT_DIR)/../target/$(RUST_TRIPLE)/$(RUST_PROFILE)/liblt.a"
+        RUST_STATIC_LIB: "$(PROJECT_DIR)/../target/$(RUST_TRIPLE)/$(RUST_PROFILE)/libtemplate.a"
       configs:
         Debug:
           GCC_OPTIMIZATION_LEVEL: "0"

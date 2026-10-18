@@ -3667,18 +3667,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lt"
-version = "0.1.0"
-dependencies = [
- "android-activity",
- "android_logger",
- "gpui-kit",
- "gpui-pre",
- "gpui-pre-mobile",
- "log",
-]
-
-[[package]]
 name = "lyon"
 version = "1.0.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6501,6 +6489,18 @@ dependencies = [
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
+]
+
+[[package]]
+name = "template"
+version = "0.1.0"
+dependencies = [
+ "android-activity",
+ "android_logger",
+ "gpui-kit",
+ "gpui-pre",
+ "gpui-pre-mobile",
+ "log",
 ]
 
 [[package]]
