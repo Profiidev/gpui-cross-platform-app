@@ -78,21 +78,21 @@ targets:
         # Header search paths so #import "gpui_ios.h" resolves
         HEADER_SEARCH_PATHS:
           - "$(PROJECT_DIR)"
-        # Valid architectures
-        VALID_ARCHS: "arm64"
-        ARCHS: "arm64"
+        # arm64 everywhere, plus x86_64 for the simulator on Intel Macs / VMs
+        ARCHS: "$(ARCHS_STANDARD)"
         ONLY_ACTIVE_ARCH: YES
-        # SDK-conditional static lib path for debug builds.
-        "RUST_STATIC_LIB[sdk=iphonesimulator*]": "$(PROJECT_DIR)/../target/aarch64-apple-ios-sim/debug/liblt.a"
-        "RUST_STATIC_LIB[sdk=iphoneos*]": "$(PROJECT_DIR)/../target/aarch64-apple-ios/debug/liblt.a"
+        RUST_PROFILE: debug
+        "RUST_TRIPLE[sdk=iphoneos*]": aarch64-apple-ios
+        "RUST_TRIPLE[sdk=iphonesimulator*][arch=arm64]": aarch64-apple-ios-sim
+        "RUST_TRIPLE[sdk=iphonesimulator*][arch=x86_64]": x86_64-apple-ios
+        RUST_STATIC_LIB: "$(PROJECT_DIR)/../target/$(RUST_TRIPLE)/$(RUST_PROFILE)/liblt.a"
       configs:
         Debug:
           GCC_OPTIMIZATION_LEVEL: "0"
           DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
           SWIFT_OPTIMIZATION_LEVEL: "-Onone"
         Release:
-          "RUST_STATIC_LIB[sdk=iphonesimulator*]": "$(PROJECT_DIR)/../target/aarch64-apple-ios-sim/release/liblt.a"
-          "RUST_STATIC_LIB[sdk=iphoneos*]": "$(PROJECT_DIR)/../target/aarch64-apple-ios/release/liblt.a"
+          RUST_PROFILE: release
           GCC_OPTIMIZATION_LEVEL: "s"
           DEBUG_INFORMATION_FORMAT: "dwarf-with-dsym"
           SWIFT_OPTIMIZATION_LEVEL: "-O"
@@ -100,32 +100,21 @@ targets:
       - name: "Build Rust Static Library"
         script: |
           set -euo pipefail
+          # Xcode scripts don't inherit the login shell PATH
+          export PATH="$HOME/.cargo/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
+          cd "${PROJECT_DIR}/.."
 
-          RUST_PROJECT_DIR="${PROJECT_DIR}/.."
-          cd "${RUST_PROJECT_DIR}"
+          [ "${CONFIGURATION}" = "Release" ] && CARGO_FLAGS="--release" || CARGO_FLAGS=""
 
-          # Determine the Rust target triple based on Xcode SDK
-          if [ "${PLATFORM_NAME}" = "iphonesimulator" ]; then
-            RUST_TARGET="aarch64-apple-ios-sim"
-          else
-            RUST_TARGET="aarch64-apple-ios"
-          fi
-
-          # Determine build profile
-          if [ "${CONFIGURATION}" = "Release" ]; then
-            CARGO_FLAGS="--release"
-          else
-            CARGO_FLAGS=""
-          fi
-
-          echo "Building gpui-mobile for ${RUST_TARGET} (${CONFIGURATION})..."
-
-          # Ensure the Rust target is installed
-          rustup target add "${RUST_TARGET}" 2>/dev/null || true
-
-          # Build the Rust static library
-          cargo build --lib --target "${RUST_TARGET}" ${CARGO_FLAGS} 2>&1
-
-          echo "Rust build complete for ${RUST_TARGET}"
+          # Must match RUST_TRIPLE in the build settings
+          for arch in ${ARCHS}; do
+            case "${PLATFORM_NAME}/${arch}" in
+              iphoneos/*) triple=aarch64-apple-ios ;;
+              iphonesimulator/arm64) triple=aarch64-apple-ios-sim ;;
+              iphonesimulator/x86_64) triple=x86_64-apple-ios ;;
+              *) echo "unsupported ${PLATFORM_NAME}/${arch}"; exit 1 ;;
+            esac
+            cargo build --lib --target "${triple}" ${CARGO_FLAGS}
+          done
         shell: /bin/bash
         basedOnDependencyAnalysis: false
