@@ -13,3 +13,4 @@ android/keystore.properties
 *.jks
 *.keystore
 VM.md
+/result

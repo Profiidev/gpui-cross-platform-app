@@ -1,20 +1,56 @@
 [package]
 name = "template"
 version = "0.1.0"
+description = "GPUI Kit app template for desktop, Android and iOS"
 edition = "2024"
+
+# `cargo packager --release` (CI: .github/workflows/app-release.yml)
+[package.metadata.packager]
+product-name = "Template"
+identifier = "io.profidev.template"
+authors = ["ProfiiDev"]
+publisher = "profidev"
+category = "Utility"
+before-packaging-command = "cargo build --release --bin template"
+icons = [
+  "packaging/icons/32x32.png",
+  "packaging/icons/128x128.png",
+  "packaging/icons/128x128@2x.png",
+  "packaging/icons/icon.ico"
+]
+
+[package.metadata.packager.deb]
+desktop-template = "packaging/template.desktop"
+depends = [
+  "libxkbcommon0",
+  "libxkbcommon-x11-0",
+  "libwayland-client0",
+  "libvulkan1",
+  "libfontconfig1",
+  "libfreetype6",
+  "libxcb1"
+]
+
+[package.metadata.packager.nsis]
+installer-icon = "packaging/icons/icon.ico"
 
 [lib]
 crate-type = ["cdylib", "staticlib", "rlib"]
 
 [dependencies]
 gpui = { package = "gpui-pre", version = "=0.3.9", default-features = false }
-gpui-kit = { version = "0.7.3", default-features = false, features = ["component"] }
+gpui-kit = { version = "0.7.3", default-features = false, features = [
+  "component"
+] }
 log = "0.4"
 
 [target.'cfg(target_os = "ios")'.dependencies]
 # ponytail: upstream src/ios/platform_view.rs uses packages::{video_player, camera}
 # without cfg gates; drop this once gpui-mobile fixes it.
-gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = ["video_player", "camera"] }
+gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = [
+  "video_player",
+  "camera"
+] }
 
 [target.'cfg(target_os = "android")'.dependencies]
 # Plugin packages are off. To re-enable one, add its feature here and undo the
@@ -27,7 +63,8 @@ gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridg
 # maps, calendar, deeplink, microphone, media_session.
 # The Java helpers in android/app/src/main/java/dev/gpui/mobile stay compiled;
 # they are inert until a Rust feature calls them.
-gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = [] }
+gpui-mobile = { package = "gpui-pre-mobile", git = "https://github.com/longbridge/gpui-mobile", rev = "c24a1308e1dcb47ce94d9ef8d8d05ca4d77d2aa7", default-features = false, features = [
+] }
 android_logger = "0.15"
 android-activity = { version = "0.6", features = ["native-activity"] }
 

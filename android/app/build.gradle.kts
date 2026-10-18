@@ -14,6 +14,11 @@ plugins {
     id("com.android.application")
 }
 
+// Single source of truth for the version: the root Cargo.toml.
+val cargoVersion = rootProject.file("../Cargo.toml").readLines()
+    .first { it.startsWith("version = ") }.substringAfter('"').substringBefore('"')
+val (vMajor, vMinor, vPatch) = cargoVersion.split(".").map { it.toInt() }
+
 // Same format as positron's CI: keyAlias, password, storeFile.
 val keystoreProperties = Properties().apply {
     val f = rootProject.file("keystore.properties")
@@ -28,8 +33,8 @@ android {
         applicationId = "io.profidev.template"
         minSdk = 26          // Vulkan 1.0 is mandatory from API 26+
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = vMajor * 10000 + vMinor * 100 + vPatch
+        versionName = cargoVersion
 
         // Tell NativeActivity which .so to load.
         // This must match the cdylib / example output name.

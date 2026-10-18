@@ -23,6 +23,8 @@ in
     [
       cargo-ndk
       just
+      # oxfmt: json/md/yaml formatting, same as CI
+      oxfmt
     ]
     ++ buildDeps
     ++ gpuiLibs;
