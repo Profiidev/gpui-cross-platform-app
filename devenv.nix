@@ -25,6 +25,8 @@ in
       just
       # oxfmt: json/md/yaml formatting, same as CI
       oxfmt
+      # `just icon`
+      imagemagick
     ]
     ++ buildDeps
     ++ gpuiLibs;

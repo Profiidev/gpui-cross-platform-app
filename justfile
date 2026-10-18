@@ -24,3 +24,23 @@ ios:
 # Desktop app (Linux / macOS / Windows)
 desktop:
     cargo run
+
+# Replace the app icon everywhere from one square PNG (1024x1024 recommended). e.g. `just icon logo.png`
+icon src:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    res=android/app/src/main/res
+    for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+        size=${d#*:}
+        magick "{{src}}" -resize "${size}x${size}" "$res/mipmap-${d%:*}/ic_launcher.png"
+        magick "{{src}}" -resize "${size}x${size}" \
+            \( +clone -alpha extract -fill black -colorize 100 -fill white -draw "circle $((size/2)),$((size/2)) $((size/2)),0" \) \
+            -alpha off -compose CopyOpacity -composite "$res/mipmap-${d%:*}/ic_launcher_round.png"
+    done
+    # App Store rejects icons with an alpha channel
+    magick "{{src}}" -resize 1024x1024 -background white -alpha remove -alpha off ios/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png
+    magick "{{src}}" -resize 32x32 packaging/icons/32x32.png
+    magick "{{src}}" -resize 128x128 packaging/icons/128x128.png
+    magick "{{src}}" -resize 256x256 packaging/icons/128x128@2x.png
+    magick "{{src}}" -define icon:auto-resize=256,128,64,48,32,16 packaging/icons/icon.ico
+    echo "icon updated from {{src}}"
