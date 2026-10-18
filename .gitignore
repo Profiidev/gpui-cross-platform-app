@@ -12,3 +12,4 @@ android/build
 android/keystore.properties
 *.jks
 *.keystore
+VM.md

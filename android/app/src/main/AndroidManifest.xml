@@ -23,34 +23,41 @@
 
     <!-- Network / connectivity permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- disabled: enable with gpui-mobile feature connectivity / network_info
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    -->
 
-    <!-- Vibration permission -->
+    <!-- disabled: enable with gpui-mobile feature vibration
     <uses-permission android:name="android.permission.VIBRATE" />
+    -->
 
-    <!-- Notification permission (required on Android 13+ / API 33+) -->
+    <!-- disabled: enable with gpui-mobile feature notifications
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    -->
 
-    <!-- Contacts permission (for contacts package) -->
+    <!-- disabled: enable with gpui-mobile feature contacts
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    -->
 
-    <!-- Calendar permissions -->
+    <!-- disabled: enable with gpui-mobile feature calendar
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    -->
 
-    <!-- Microphone permission (for audio recording) -->
+    <!-- disabled: enable with gpui-mobile feature microphone
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    -->
 
-    <!-- Camera permission (for image_picker camera source) -->
+    <!-- disabled: enable with gpui-mobile feature camera / image_picker
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
-    <!-- Camera feature (optional — app works without camera) -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    -->
 
     <!-- Vulkan feature declaration.
          `required="false"` allows the app to fall back to OpenGL ES on
@@ -120,13 +127,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Deep link intent filter for custom URL scheme -->
+            <!-- disabled: enable with gpui-mobile feature deeplink
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="gpui" />
             </intent-filter>
+            -->
         </activity>
         <activity
             android:name="dev.gpui.mobile.GpuiPathPicker"
@@ -134,26 +142,26 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard|navigation|uiMode|density"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
-        <!-- Transparent helper Activity for file/image picker results. -->
+        <!-- disabled: helper activities for file_selector / image_picker,
+             permission_handler and local_auth
         <activity
             android:name="dev.gpui.mobile.GpuiPickerActivity"
             android:exported="false"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
 
-        <!-- Transparent helper Activity for runtime permission requests. -->
         <activity
             android:name="dev.gpui.mobile.GpuiPermissionActivity"
             android:exported="false"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
 
-        <!-- Transparent helper Activity for biometric authentication (BiometricPrompt). -->
         <activity
             android:name="dev.gpui.mobile.GpuiAuthActivity"
             android:exported="false"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
+        -->
 
     </application>
 

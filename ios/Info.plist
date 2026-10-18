@@ -57,12 +57,15 @@
         <key>NSAllowsArbitraryLoads</key>
         <true />
     </dict>
+    <!-- disabled: enable with gpui-mobile features image_picker / camera / microphone
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs access to your photo library to pick images.</string>
     <key>NSCameraUsageDescription</key>
     <string>This app needs access to the camera to take photos and videos.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>This app needs access to the microphone to record video with audio.</string>
+    -->
+    <!-- disabled: enable with gpui-mobile feature deeplink
     <key>CFBundleURLTypes</key>
     <array>
         <dict>
@@ -74,5 +77,6 @@
             </array>
         </dict>
     </array>
+    -->
 </dict>
 </plist>
