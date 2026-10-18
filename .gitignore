@@ -1,1 +1,14 @@
 /target
+.devenv*
+.direnv
+android/.gradle
+android/app/build
+android/app/src/main/jniLibs
+local.properties
+.android
+ios/build
+ios/Lt.xcodeproj
+android/build
+android/keystore.properties
+*.jks
+*.keystore
