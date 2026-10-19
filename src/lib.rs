@@ -2,7 +2,7 @@
 #[cfg(any(target_os = "ios", target_os = "android"))]
 extern crate gpui_mobile;
 
-use gpui::{App, Context, IntoElement, Render, Window, WindowOptions, div, prelude::*};
+use gpui::{div, prelude::*, App, Context, IntoElement, Render, Window, WindowOptions};
 
 struct Home;
 
@@ -17,8 +17,20 @@ impl Render for Home {
   }
 }
 
+/// Positron's shadcn palette (zinc + blue), dark only.
+fn apply_theme(cx: &mut App) {
+  use gpui_kit::component::{Theme, ThemeMode, ThemeRegistry};
+  ThemeRegistry::global_mut(cx)
+    .load_themes_from_str(include_str!("theme.json"))
+    .expect("parse theme.json");
+  let dark = ThemeRegistry::global(cx).themes()["Shadcn Dark"].clone();
+  Theme::global_mut(cx).dark_theme = dark;
+  Theme::change(ThemeMode::Dark, None, cx);
+}
+
 fn open_root(cx: &mut App) {
   gpui_kit::init(cx);
+  apply_theme(cx);
   let options = WindowOptions {
     // Matches StartupWMClass in packaging/app.desktop
     app_id: Some("{{app_id}}".into()),
