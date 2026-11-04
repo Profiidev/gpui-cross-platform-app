@@ -5,7 +5,7 @@ app_id := `sed -n 's/.*applicationId = "\(.*\)"/\1/p' android/app/build.gradle.k
 # Debug build for one ABI (default: emulator), install and launch. e.g. `just android arm64-v8a`
 android abi="x86_64":
     rm -rf {{jni}}
-    cargo ndk -t {{abi}} -P 26 -o {{jni}} build --lib
+    cargo ndk -t {{abi}} -P 30 -o {{jni}} build --lib
     rm -f {{jni}}/*/libgpui_mobile-*.so
     cd android && ./gradlew installDebug
     adb shell am start -n {{app_id}}/dev.gpui.mobile.GpuiActivity
@@ -13,7 +13,7 @@ android abi="x86_64":
 # Release APK + AAB for all ABIs, signed when android/keystore.properties exists
 android-release:
     rm -rf {{jni}}
-    cargo ndk {{abis}} -P 26 -o {{jni}} build --lib --release
+    cargo ndk {{abis}} -P 30 -o {{jni}} build --lib --release
     rm -f {{jni}}/*/libgpui_mobile-*.so
     cd android && ./gradlew assembleRelease bundleRelease
 

@@ -35,6 +35,7 @@ platforms = { type = "string", prompt = "Platforms to ship", choices = [
   "mobile+desktop",
   "mobile",
 ], default = "mobile+desktop" }
+wear_os = { type = "bool", prompt = "Include Wear OS support?", default = false }
 
 [hooks]
 pre = ["hooks/pre.rhai"]
@@ -48,4 +49,18 @@ ignore = [
   "flake.lock",
   ".github/workflows/desktop-release.yml",
   ".github/workflows/nix-build.yml",
+]
+
+[conditional.'wear_os'.placeholders]
+wear_widget = { type = "bool", prompt = "Include Wear OS watch face widget (complication)?", default = false }
+
+[conditional.'!wear_os']
+ignore = [
+  "android/app/src/main/res/values-watch",
+  "android/app/src/main/java/dev/gpui/mobile/GpuiComplicationService.java",
+]
+
+[conditional.'wear_os && !wear_widget']
+ignore = [
+  "android/app/src/main/java/dev/gpui/mobile/GpuiComplicationService.java",
 ]

@@ -31,7 +31,7 @@ android {
 
     defaultConfig {
         applicationId = "{{app_id}}"
-        minSdk = 26          // Vulkan 1.0 is mandatory from API 26+
+        minSdk = 30          // Wear OS 3.0+ and modern Android baseline
         targetSdk = 34
         versionCode = vMajor * 10000 + vMinor * 100 + vPatch
         versionName = cargoVersion
@@ -123,4 +123,8 @@ dependencies {
     implementation("androidx.biometric:biometric:1.1.0")
     // AndroidX Media for MediaSessionCompat (used by GpuiMediaSession for system controls)
     implementation("androidx.media:media:1.7.1")
+{% if wear_widget %}
+    // Wear OS Watch Face Complication data source (inert on normal phones/tablets)
+    implementation("androidx.wear.watchface:watchface-complications-data-source:1.2.1")
+{% endif %}
 }

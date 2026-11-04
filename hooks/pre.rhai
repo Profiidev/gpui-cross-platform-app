@@ -20,3 +20,7 @@ variable::set("app_name", app_name);
 
 // Inert in the template repo (GitHub only runs *.yml), active in generated repos
 file::rename(".github/workflows/renovate.yml.tmpl", ".github/workflows/renovate.yml");
+
+if !variable::is_set("wear_widget") {
+  variable::set("wear_widget", false);
+}

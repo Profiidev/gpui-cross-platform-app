@@ -82,7 +82,13 @@
         android:name="android.hardware.touchscreen"
         android:required="false"
     />
-
+{% if wear_os %}
+    <!-- Optional watch feature flag so the APK installs on both Wear OS and normal phones/tablets. -->
+    <uses-feature
+        android:name="android.hardware.type.watch"
+        android:required="false"
+    />
+{% endif %}
     <application
         android:allowBackup="false"
         android:hardwareAccelerated="true"
@@ -93,6 +99,13 @@
         android:supportsRtl="true"
         android:theme="@style/GpuiTheme"
     >
+{% if wear_os %}
+        <!-- Standalone Wear OS app (runs independently of a companion phone app; ignored on phones). -->
+        <meta-data
+            android:name="com.google.android.wearable.standalone"
+            android:value="true"
+        />
+{% endif %}
 
         <!--
           GpuiActivity extends NativeActivity and integrates the AndroidX
@@ -142,6 +155,28 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|keyboard|navigation|uiMode|density"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
         />
+{% if wear_widget %}
+        <!-- Wear OS Watch Face Complication data source (ignored on normal phones/tablets). -->
+        <service
+            android:name="dev.gpui.mobile.GpuiComplicationService"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher_round"
+            android:label="@string/app_name"
+            android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER"
+        >
+            <intent-filter>
+                <action android:name="android.support.wearable.complications.ACTION_COMPLICATION_UPDATE_REQUEST" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.wearable.complications.SUPPORTED_TYPES"
+                android:value="SHORT_TEXT,LONG_TEXT,RANGED_VALUE"
+            />
+            <meta-data
+                android:name="android.support.wearable.complications.UPDATE_PERIOD_SECONDS"
+                android:value="300"
+            />
+        </service>
+{% endif %}
         <!-- disabled: helper activities for file_selector / image_picker,
              permission_handler and local_auth
         <activity

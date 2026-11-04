@@ -7,7 +7,14 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.Selection;
 import android.text.TextWatcher;
+{% if wear_os %}
+import android.view.InputDevice;
+{% endif %}
 import android.view.KeyEvent;
+{% if wear_os %}
+import android.view.MotionEvent;
+import android.view.ViewConfiguration;
+{% endif %}
 import android.view.ViewGroup;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
@@ -26,6 +33,11 @@ public class GpuiInputActivity extends NativeActivity {
             String library = getPackageManager().getActivityInfo(getComponentName(),
                     PackageManager.GET_META_DATA).metaData.getString("android.app.lib_name");
             if (library != null) System.loadLibrary(library);
+{% if wear_os %}
+            boolean isWatch = getPackageManager().hasSystemFeature(PackageManager.FEATURE_WATCH);
+            boolean isRound = getResources().getConfiguration().isScreenRound();
+            nativeSetDeviceFormFactor(isWatch, isRound);
+{% endif %}
         } catch (PackageManager.NameNotFoundException error) {
             throw new IllegalStateException(error);
         }
@@ -224,6 +236,23 @@ public class GpuiInputActivity extends NativeActivity {
             };
         }
     }
-
+{% if wear_os %}
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_SCROLL
+                && event.isFromSource(InputDevice.SOURCE_ROTARY_ENCODER)) {
+            float delta = event.getAxisValue(MotionEvent.AXIS_SCROLL);
+            ViewConfiguration vc = ViewConfiguration.get(this);
+            float scaledDelta = delta * vc.getScaledVerticalScrollFactor();
+            nativeRotaryScroll(scaledDelta);
+            return true;
+        }
+        return super.onGenericMotionEvent(event);
+    }
+{% endif %}
     private static native void nativeIme(long session, int kind, String text, int start, int end);
+{% if wear_os %}
+    private static native void nativeRotaryScroll(float delta);
+    private static native void nativeSetDeviceFormFactor(boolean isWatch, boolean isRound);
+{% endif %}
 }

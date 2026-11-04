@@ -52,6 +52,10 @@
 
         <!-- Disable default content transitions that could cause flicker. -->
         <item name="android:windowContentTransitions">false</item>
+{% if wear_os %}
+        <!-- Disable Wear OS edge swipe-to-dismiss so GPUI receives horizontal touch events. -->
+        <item name="android:windowSwipeToDismiss">false</item>
+{% endif %}
     </style>
 
     <!-- Splash theme using AndroidX SplashScreen compat library.
