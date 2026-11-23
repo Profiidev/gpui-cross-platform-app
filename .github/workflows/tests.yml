@@ -38,11 +38,3 @@ jobs:
           name: test-results
           path: ${{ github.workspace }}/target/nextest/default/junit.xml
           retention-days: 5
-
-      - name: Upload Event File
-        if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
-        with:
-          name: event-file
-          path: ${{ github.event_path }}
-          retention-days: 5
